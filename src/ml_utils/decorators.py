@@ -5,13 +5,14 @@ import logging
 import os
 import time
 from collections.abc import Callable
-from typing import Any, TypeVar
+from typing import Any, ParamSpec, TypeVar, overload
 
 from ml_utils.logger import get_logger
 
 _DECORATORS_ACTIVE: bool = os.environ.get("STAGE", "dev").strip().lower() != "prod"
 
-F = TypeVar("F", bound=Callable[..., Any])
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
 class _RealFuncFilter(logging.Filter):
@@ -61,7 +62,7 @@ def is_decorators_active() -> bool:
     return _DECORATORS_ACTIVE
 
 
-def time_it[F: Callable[..., Any]](func: F) -> F:
+def time_it(func: Callable[P, R]) -> Callable[P, R]:
     """Log the execution time of the decorated function.
 
     Uses the decorated function's own module logger so the log line
@@ -75,7 +76,7 @@ def time_it[F: Callable[..., Any]](func: F) -> F:
     log.addFilter(_REAL_FUNC_FILTER)
 
     @functools.wraps(func)
-    def wrapper(*args: Any, **kwargs: Any) -> Any:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         start = time.perf_counter()
         try:
             return func(*args, **kwargs)
@@ -88,16 +89,30 @@ def time_it[F: Callable[..., Any]](func: F) -> F:
                 extra={"duration_s": round(elapsed, 6), "_real_func_name": func.__name__},
             )
 
-    return wrapper  # type: ignore[return-value]
+    return wrapper
 
 
-def log_it[F: Callable[..., Any]](
-    func: F | None = None,
+@overload
+def log_it(func: Callable[P, R]) -> Callable[P, R]: ...
+
+
+@overload
+def log_it(
+    func: None = None,
+    *,
+    level: int = ...,
+    log_args: bool = ...,
+    log_result: bool = ...,
+) -> Callable[[Callable[P, R]], Callable[P, R]]: ...
+
+
+def log_it(
+    func: Callable[P, R] | None = None,
     *,
     level: int = logging.DEBUG,
     log_args: bool = False,
     log_result: bool = False,
-) -> Any:
+) -> Callable[P, R] | Callable[[Callable[P, R]], Callable[P, R]]:
     """Log entry and exit of the decorated function.
 
     Can be used bare or with options:
@@ -119,7 +134,7 @@ def log_it[F: Callable[..., Any]](
                     all other types are reduced to just the class name.
     """
 
-    def decorator(f: F) -> F:
+    def decorator(f: Callable[P, R]) -> Callable[P, R]:
         if not _DECORATORS_ACTIVE:
             return f
 
@@ -129,7 +144,7 @@ def log_it[F: Callable[..., Any]](
         _extra = {"_real_func_name": f.__name__}
 
         @functools.wraps(f)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             if log_args:
                 arg_str = ", ".join(
                     [repr(a) for a in args] + [f"{k}={v!r}" for k, v in kwargs.items()]
@@ -149,7 +164,7 @@ def log_it[F: Callable[..., Any]](
                 log.exception("✗ %s raised %s", f.__qualname__, type(exc).__name__, extra=_extra)
                 raise
 
-        return wrapper  # type: ignore[return-value]
+        return wrapper
 
     # Support both @log_it and @log_it(level=...) usage
     if func is not None:
