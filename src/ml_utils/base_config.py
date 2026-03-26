@@ -36,6 +36,7 @@ class BaseConfigWithYaml(BaseSettings):
 
     Usage:
     ```python
+    from pathlib import Path
     from pydantic import Field
     from pydantic_settings import SettingsConfigDict
     from ml_utils.base_config import BaseConfigWithYaml
@@ -78,7 +79,9 @@ class BaseConfigWithYaml(BaseSettings):
         if cls._yaml_file and cls._yaml_file.exists():
             sources.append(YamlConfigSettingsSource(settings_cls, yaml_file=cls._yaml_file))
         sources.append(dotenv_settings)
-        cli: CliSettingsSource[BaseSettings] = CliSettingsSource(
-            settings_cls, formatter_class=RichHelpFormatter, cli_parse_args=True
-        )
-        return (cli, *sources)
+        if settings_cls.model_config.get("cli_parse_args"):
+            cli: CliSettingsSource[BaseSettings] = CliSettingsSource(
+                settings_cls, formatter_class=RichHelpFormatter, cli_parse_args=True
+            )
+            return (cli, *sources)
+        return tuple(sources)
