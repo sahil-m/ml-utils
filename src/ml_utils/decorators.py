@@ -168,7 +168,7 @@ if __name__ == "__main__":
     from ml_utils.logger import shutdown_logging
 
     @time_it
-    def slow_function():
+    def slow_function() -> None:
         sleep(0.5)
 
     @log_it(level=logging.INFO, log_args=True)
@@ -180,12 +180,12 @@ if __name__ == "__main__":
         return x - y
 
     @log_it(log_result=True)
-    def summarise(data: list[int]) -> dict:
+    def summarise(data: list[int]) -> dict[str, Any]:
         return {"count": len(data), "total": sum(data)}
 
     @time_it
     @log_it
-    def process(data: list) -> int:
+    def process(data: list[Any]) -> int:
         sleep(0.1)
         return len(data)
 

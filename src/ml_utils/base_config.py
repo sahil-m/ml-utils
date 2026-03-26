@@ -78,7 +78,7 @@ class BaseConfigWithYaml(BaseSettings):
         if cls._yaml_file and cls._yaml_file.exists():
             sources.append(YamlConfigSettingsSource(settings_cls, yaml_file=cls._yaml_file))
         sources.append(dotenv_settings)
-        cli = CliSettingsSource(
+        cli: CliSettingsSource[BaseSettings] = CliSettingsSource(
             settings_cls, formatter_class=RichHelpFormatter, cli_parse_args=True
         )
         return (cli, *sources)

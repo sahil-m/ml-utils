@@ -21,6 +21,7 @@ import sys
 from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 # %% [markdown]
 # # Module Level State
@@ -66,7 +67,7 @@ class JsonFormatter(logging.Formatter):
     Exception info is captured under the 'exception' key.
     """
 
-    def __init__(self, *args, use_utc: bool = True, **kwargs) -> None:
+    def __init__(self, *args: Any, use_utc: bool = True, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.use_utc = use_utc
 
@@ -91,7 +92,7 @@ class JsonFormatter(logging.Formatter):
                 message = message[:idx]
 
         tz = UTC if self.use_utc else None
-        log_dict: dict = {
+        log_dict: dict[str, Any] = {
             "timestamp": datetime.fromtimestamp(record.created, tz=tz).isoformat(),
             "level": record.levelname,
             "logger": record.name,
@@ -124,6 +125,7 @@ class JsonFormatter(logging.Formatter):
 # %%
 def _make_console_handler(level: int = logging.DEBUG) -> logging.Handler:
     """Create a console handler. Uses RichHandler if available, else StreamHandler."""
+    handler: logging.Handler
     try:
         from rich.logging import RichHandler
 
