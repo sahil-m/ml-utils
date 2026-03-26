@@ -1,7 +1,6 @@
 # ml-utils
 
-[![CI](https://github.com/sahil-maheshwari/ml-utils/actions/workflows/ci.yml/badge.svg)](https://github.com/sahil-maheshwari/ml-utils/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/ml-utils)](https://pypi.org/project/ml-utils/)
+[![CI](https://github.com/sahil-m/ml-utils/actions/workflows/ci.yml/badge.svg)](https://github.com/sahil-m/ml-utils/actions/workflows/ci.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -9,8 +8,16 @@ ML utilities for configuration management, async logging, and function decorator
 
 ## Installation
 
+Install directly from GitHub (not yet on PyPI):
+
 ```bash
-uv add ml-utils
+uv add "ml-utils @ git+https://github.com/sahil-m/ml-utils.git"
+```
+
+Or pin to a specific tag:
+
+```bash
+uv add "ml-utils @ git+https://github.com/sahil-m/ml-utils.git@v0.1.0"
 ```
 
 ## Quick Start
