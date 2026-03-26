@@ -156,7 +156,13 @@ def log_it(
             try:
                 result = f(*args, **kwargs)
                 if log_result:
-                    log.log(level, "← %s returned %s", f.__qualname__, _repr_result(result), extra=_extra)
+                    log.log(
+                        level,
+                        "← %s returned %s",
+                        f.__qualname__,
+                        _repr_result(result),
+                        extra=_extra,
+                    )
                 else:
                     log.log(level, "← %s returned", f.__qualname__, extra=_extra)
                 return result
@@ -179,6 +185,7 @@ if __name__ == "__main__":
     # setup_logging(log_file="decorators.log", level=logging.DEBUG, use_utc=False)
     # or
     from ml_utils.stage import init
+
     init(log_file="decorators.log")
     from ml_utils.logger import shutdown_logging
 

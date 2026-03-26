@@ -50,6 +50,7 @@ class AppConfig2(BaseConfigWithYaml):
 # # Helpers
 # %%
 
+
 @contextmanager
 def clean_environment(*env_prefixes: str):
     """
@@ -310,6 +311,7 @@ class TestEdgeCases:
 # %% [markdown]
 # ## Multi-Config Coexistence
 # %%
+
 
 class TestMultiConfigCoexistence:
     def test_separate_env_prefixes_dont_bleed(self):
