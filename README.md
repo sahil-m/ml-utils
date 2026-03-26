@@ -1,10 +1,15 @@
 # ml-utils
 
+[![CI](https://github.com/sahil-maheshwari/ml-utils/actions/workflows/ci.yml/badge.svg)](https://github.com/sahil-maheshwari/ml-utils/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/ml-utils)](https://pypi.org/project/ml-utils/)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 ML utilities for configuration management, async logging, and function decorators.
 
 ## Installation
 
-```bashv
+```bash
 uv add ml-utils
 ```
 

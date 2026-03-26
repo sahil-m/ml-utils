@@ -1,13 +1,14 @@
-from typing import ClassVar, Optional
 from pathlib import Path
-from rich_argparse import RichHelpFormatter
+from typing import ClassVar
+
 from pydantic_settings import (
     BaseSettings,
     CliSettingsSource,
-    SettingsConfigDict,
     PydanticBaseSettingsSource,
+    SettingsConfigDict,
     YamlConfigSettingsSource,
 )
+from rich_argparse import RichHelpFormatter
 
 
 class BaseConfigWithYaml(BaseSettings):
@@ -32,22 +33,22 @@ class BaseConfigWithYaml(BaseSettings):
             - env_prefix: Prefix for environment variables (empty string)
             - extra: How to handle extra attributes ("ignore")
             - cli_parse_args: Whether to parse command-line arguments (True, toggle per use case)
-            
+
     Usage:
     ```python
     from pydantic import Field
     from pydantic_settings import SettingsConfigDict
     from ml_utils.base_config import BaseConfigWithYaml
-    
+
     class MyConfig(BaseConfigWithYaml):
         param1: str = Field(..., description="Description for param1")
         param2: int = Field(42, description="Description for param2")
-        
+
         model_config = SettingsConfigDict(
             env_prefix="MYAPP_",
             cli_parse_args=True,
         )
-        
+
     # Set the YAML file path before instantiation
     BaseConfigWithYaml._yaml_file = Path("config.yaml")
     my_config = MyConfig()
@@ -56,7 +57,7 @@ class BaseConfigWithYaml(BaseSettings):
 
     """
 
-    _yaml_file: ClassVar[Optional[Path]] = None  # set before instantiation
+    _yaml_file: ClassVar[Path | None] = None  # set before instantiation
 
     model_config = SettingsConfigDict(
         env_file=".env",

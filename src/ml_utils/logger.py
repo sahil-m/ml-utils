@@ -18,9 +18,9 @@ import logging
 import logging.handlers
 import queue
 import sys
-from datetime import datetime, timezone
+from collections.abc import Sequence
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Sequence
 
 # %% [markdown]
 # # Module Level State
@@ -90,7 +90,7 @@ class JsonFormatter(logging.Formatter):
                 exception_text = message[idx + 1 :]  # skip the leading \n
                 message = message[:idx]
 
-        tz = timezone.utc if self.use_utc else None
+        tz = UTC if self.use_utc else None
         log_dict: dict = {
             "timestamp": datetime.fromtimestamp(record.created, tz=tz).isoformat(),
             "level": record.levelname,
@@ -276,7 +276,7 @@ if __name__ == "__main__":
         extra={"user_id": 123, "operation": "test_logging"},
     )
     try:
-        1 / 0
+        1 / 0  # noqa: B018 — intentional demo of exception logging
     except ZeroDivisionError:
         logger.exception("An error occurred")
     shutdown_logging()

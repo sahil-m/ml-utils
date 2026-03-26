@@ -4,7 +4,8 @@ import functools
 import logging
 import os
 import time
-from typing import Any, Callable, TypeVar
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 from ml_utils.logger import get_logger
 
@@ -60,7 +61,7 @@ def is_decorators_active() -> bool:
     return _DECORATORS_ACTIVE
 
 
-def time_it(func: F) -> F:
+def time_it[F: Callable[..., Any]](func: F) -> F:
     """Log the execution time of the decorated function.
 
     Uses the decorated function's own module logger so the log line
@@ -90,7 +91,7 @@ def time_it(func: F) -> F:
     return wrapper  # type: ignore[return-value]
 
 
-def log_it(
+def log_it[F: Callable[..., Any]](
     func: F | None = None,
     *,
     level: int = logging.DEBUG,

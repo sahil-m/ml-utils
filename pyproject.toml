@@ -3,15 +3,43 @@ name = "ml-utils"
 version = "0.1.0"
 description = "ML utilities for config. management, logging, and more."
 readme = "README.md"
+license = "MIT"
 authors = [
-    { name = "Sahil Maheshwari", email = "sahil030288@gmail.com" }
+    { name = "Sahil m", email = "sahil030288@gmail.com" }
 ]
 requires-python = ">=3.12"
+keywords = ["machine learning", "logging", "configuration", "decorators", "utilities"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
 dependencies = [
     "pydantic>=2.12.5",
     "pydantic-settings>=2.13.1",
     "pyyaml>=6.0.3",
     "rich-argparse>=1.7.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/sahil-m/ml-utils"
+Repository = "https://github.com/sahil-m/ml-utils"
+Issues = "https://github.com/sahil-m/ml-utils/issues"
+Changelog = "https://github.com/sahil-m/ml-utils/blob/main/CHANGELOG.md"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.0",
+    "ruff>=0.11.2",
 ]
 
 [build-system]
@@ -20,3 +48,17 @@ build-backend = "uv_build"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
